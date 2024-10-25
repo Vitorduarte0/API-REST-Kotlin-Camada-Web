@@ -1,7 +1,7 @@
 package br.com.alura.forum.controller
 
-import br.com.alura.forum.dto.NovoTopicoDTO
-import br.com.alura.forum.model.Topico
+import br.com.alura.forum.dto.TopicoForm
+import br.com.alura.forum.dto.TopicoView
 import br.com.alura.forum.services.TopicoService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -15,17 +15,17 @@ import org.springframework.web.bind.annotation.RestController
 class TopicoController (private val service: TopicoService) {
 
     @GetMapping
-    fun listarTopicos(): List<Topico> {
+    fun listarTopicos(): List<TopicoView> {
         return service.listarTopicos()
     }
 
     @GetMapping("/{id}")
-    fun buscarTopicoPorId(@PathVariable id: Long): Topico {
+    fun buscarTopicoPorId(@PathVariable id: Long): TopicoView {
         return service.burcarTopicoPorId(id)
     }
 
     @PostMapping
-    fun cadastrarTopico(@RequestBody novoTopicoDTO: NovoTopicoDTO) {
-        return service.cadastrar(novoTopicoDTO)
+    fun cadastrarTopico(@RequestBody topicoForm: TopicoForm) {
+        return service.cadastrar(topicoForm)
     }
 }
