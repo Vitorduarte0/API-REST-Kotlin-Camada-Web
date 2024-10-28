@@ -1,12 +1,15 @@
 package br.com.alura.forum.controller
 
+import br.com.alura.forum.dto.AtualizaForm
 import br.com.alura.forum.dto.TopicoForm
 import br.com.alura.forum.dto.TopicoView
 import br.com.alura.forum.services.TopicoService
 import jakarta.validation.Valid
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -28,5 +31,14 @@ class TopicoController (private val service: TopicoService) {
     @PostMapping
     fun cadastrarTopico(@RequestBody @Valid topicoForm: TopicoForm) {
         return service.cadastrar(topicoForm)
+    }
+    @PutMapping
+    fun atualizarTopico(@RequestBody @Valid atualizaForm: AtualizaForm) {
+        return service.atualizarTopico(atualizaForm)
+    }
+
+    @DeleteMapping("/{id}")
+    fun deletarTopico(@PathVariable id: Long) {
+        return service.deletarTopico(id)
     }
 }
