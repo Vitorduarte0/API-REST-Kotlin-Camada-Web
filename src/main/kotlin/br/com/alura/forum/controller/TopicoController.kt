@@ -5,14 +5,10 @@ import br.com.alura.forum.dto.TopicoForm
 import br.com.alura.forum.dto.TopicoView
 import br.com.alura.forum.services.TopicoService
 import jakarta.validation.Valid
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.util.UriComponentsBuilder
 
 @RestController
 @RequestMapping("/topicos")
@@ -29,15 +25,25 @@ class TopicoController (private val service: TopicoService) {
     }
 
     @PostMapping
-    fun cadastrarTopico(@RequestBody @Valid topicoForm: TopicoForm) {
-        return service.cadastrar(topicoForm)
+    fun cadastrarTopico(
+        @RequestBody @Valid topicoForm: TopicoForm,
+        uriBuilder: UriComponentsBuilder
+    ): ResponseEntity<TopicoView> {
+        val topicoView = service.cadastrar(topicoForm)
+        val uri = uriBuilder.path("/topicos/${topicoView.id}").build().toUri()
+
+        return ResponseEntity.created(uri).body(topicoView)
     }
+
     @PutMapping
-    fun atualizarTopico(@RequestBody @Valid atualizaForm: AtualizaForm) {
-        return service.atualizarTopico(atualizaForm)
+    fun atualizarTopico(@RequestBody @Valid atualizaForm: AtualizaForm): ResponseEntity<TopicoView> {
+        val topicoViewAtualizado = service.atualizarTopico(atualizaForm)
+
+        return ResponseEntity.ok(topicoViewAtualizado)
     }
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     fun deletarTopico(@PathVariable id: Long) {
         return service.deletarTopico(id)
     }
