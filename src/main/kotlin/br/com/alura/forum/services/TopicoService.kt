@@ -3,6 +3,7 @@ package br.com.alura.forum.services
 import br.com.alura.forum.dto.AtualizaForm
 import br.com.alura.forum.dto.TopicoForm
 import br.com.alura.forum.dto.TopicoView
+import br.com.alura.forum.exception.NotFoundException
 import br.com.alura.forum.mapper.TopicoFormMapper
 import br.com.alura.forum.mapper.TopicoViewMapper
 import br.com.alura.forum.model.Topico
@@ -14,7 +15,8 @@ import org.springframework.stereotype.Service
 class TopicoService(
     private var topicos: MutableList<Topico>,
     private val topicoViewMapper: TopicoViewMapper,
-    private val topicoFormMapper: TopicoFormMapper
+    private val topicoFormMapper: TopicoFormMapper,
+    private val notFoundMessage: String = "Topico Não encontrado!"
 ) {
 
     fun listarTopicos(): List<TopicoView> {
@@ -61,7 +63,11 @@ class TopicoService(
     }
 
     fun deletarTopico(id: Long) {
-        val topico = topicos.first { topico ->  topico.id == id}
+        //usando o stream do java para uasr o recurso do orElseThrow
+        val topico = topicos.stream()
+            .filter { topico ->  topico.id == id}
+            .findFirst()
+            .orElseThrow{NotFoundException(notFoundMessage)}
 
         topicos.remove(topico)
     }
