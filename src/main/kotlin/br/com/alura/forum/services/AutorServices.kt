@@ -1,20 +1,13 @@
 package br.com.alura.forum.services
 
 import br.com.alura.forum.model.Usuario
+import br.com.alura.forum.repository.UsuarioRepository
 import org.springframework.stereotype.Service
 
 @Service
-class AutorServices (private val autores: MutableList<Usuario>) {
-    init {
-        val autor = Usuario(
-            id = 1,
-            nome = "Vitor",
-            email = "vitor.email.com"
-        )
-        autores.add(autor)
-    }
+class AutorServices (private val autorRepository: UsuarioRepository) {
 
     fun buscarAutorPorId(idAutor: Long): Usuario {
-        return autores.first { autor -> autor.id == idAutor }
+        return autorRepository.findById(idAutor).get()
     }
 }

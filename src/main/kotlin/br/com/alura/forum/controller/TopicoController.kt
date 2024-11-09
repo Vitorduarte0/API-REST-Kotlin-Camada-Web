@@ -2,6 +2,7 @@ package br.com.alura.forum.controller
 
 import br.com.alura.forum.dto.AtualizaForm
 import br.com.alura.forum.dto.TopicoForm
+import br.com.alura.forum.dto.TopicoPorCategoriaDTO
 import br.com.alura.forum.dto.TopicoView
 import br.com.alura.forum.services.TopicoService
 import jakarta.validation.Valid
@@ -33,6 +34,11 @@ class TopicoController (private val service: TopicoService) {
     @CacheEvict(value = ["topicos"])
     fun buscarTopicoPorId(@PathVariable id: Long): TopicoView {
         return service.burcarTopicoPorId(id)
+    }
+
+    @GetMapping("/relatorio")
+    fun relatorio(): List<TopicoPorCategoriaDTO> {
+        return service.relatorio()
     }
 
     @PostMapping
