@@ -12,7 +12,7 @@ data class Resposta(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
     val mensagem: String,
-    val dataCriacao: LocalDateTime,
+    val dataCriacao: LocalDateTime = LocalDateTime.now(),
     @ManyToOne
     val autor: Usuario,
     @ManyToOne
